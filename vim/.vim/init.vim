@@ -1,3 +1,36 @@
+" enter the current millenim
+set nocompatible
+
+
+" FINDING FILES:
+
+" Search down into subfolders
+" Provides tab-completion for all file-realted tasks
+set path+=**
+
+" Display all matching files when we tab complete
+set wildmenu
+
+" NOW WE CAN:
+" - Hit tab to :find by partial match
+" - Use * to make it fuzzy
+
+" THINGS TO CONSIDER:
+" - :b lets you autocomplete any open buffer
+
+
+" TAG JUMPIN:
+
+" Create the `tags` file (may need to install ctags first)
+command! MakeTags !ctags -R .
+set tags=./tags,tags,./.git/tags;
+
+" NOW WE CAN:
+" - Use ^] to jump to tag under cursor
+" - Use g^] for ambiguous tags
+" - Use ^t to jump back up the tag stack
+
+
 " Show the cursor position all the time
 set ruler
 " Show line number
