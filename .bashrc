@@ -21,3 +21,9 @@ alias wget="wget -c"
 alias du="du -h --max-depth=1"
 alias l='ls'
 alias ll='ls -Ahl'
+
+# Customized functions
+# Usage: psgrep python | xargs kill -9
+function psgrep() {
+    ps aux | grep "$1" | awk '{print $2}'
+}
