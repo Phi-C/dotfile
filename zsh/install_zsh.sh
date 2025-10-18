@@ -72,8 +72,23 @@ install_oh_my_zsh() {
 
 
 ### main entry point
-if [[ ${NCURSES_INSTALL} == "ON" ]]; then
-    install_ncurses
-fi
-install_zsh
-install_oh_my_zsh
+case "$1" in
+    ncurses)
+        install_ncurses
+        ;;
+    zsh)
+        install_zsh
+        ;;
+    oh_my_zsh)
+        install_oh_my_zsh
+        ;;
+    *)
+        if [[ ${NCURSES_INSTALL} == "ON" ]]; then
+            install_ncurses
+        fi
+        install_zsh
+        install_oh_my_zsh
+        echo "You may set http/https proxy to speed up wget process"
+        ;;
+esac
+
