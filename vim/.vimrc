@@ -1,2 +1,2 @@
 " For Legacy Vim
-source ~/.vim/init.vim
+source ~/.vim/init.vimrc

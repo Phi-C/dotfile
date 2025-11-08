@@ -16,6 +16,14 @@ set tabstop=4
 set shiftwidth=4
 set expandtab
 
+" Enable mouse
+set mouse=a
+" Show history command
+set showcmd     " display incomplete commands right_bottom
+
+" Clipboard setting
+set clipboard=unnamed
+
 " NOW WE CAN:
 " - Hit tab to :find by partial match
 " - Use * to make it fuzzy
@@ -38,6 +46,7 @@ set tags=./tags,tags,./.git/tags;
 
 " Show the cursor position all the time
 set ruler
+set rulerformat=%35(%=%r%Y\|%{&ff}\|%{strlen(&fenc)?&fenc:'none'}\ %m\ %l/%L%)
 " Show line number
 set nu
 " Set relative line number, it is useful in command such as num-j/k
@@ -78,3 +87,9 @@ nnoremap <Down>  :echoe "Use j"<CR>
 " inoremap <Right> <ESC>:echoe "Use l"<CR>
 " inoremap <Up>    <ESC>:echoe "Use k"<CR>
 " inoremap <Down>  <ESC>:echoe "Use j"<CR>
+
+
+call plug#begin('~/.vim/plugged')
+Plug 'ruanyl/vim-gh-line'
+Plug 'preservim/tagbar'
+call plug#end()
