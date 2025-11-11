@@ -5,7 +5,7 @@ NCURSES_INSTALL=ON
 
 install_ncurses() {
     if [ ! -f "ncurses-6.1.tar.gz" ]; then
-        wget -q https://ftp.gnu.org/pub/gnu/ncurses/ncurses-6.1.tar.gz --no-check-certificate
+        wget -c https://ftp.gnu.org/pub/gnu/ncurses/ncurses-6.1.tar.gz --no-check-certificate
     fi
     tar -zxvf ncurses-6.1.tar.gz
 
@@ -26,7 +26,7 @@ install_zsh() {
     else
         # install zsh from source
         if [ ! -f "zsh.tar.xz" ]; then
-            wget -q -O zsh.tar.xz https://sourceforge.net/projects/zsh/files/latest/download --no-check-certificate
+            wget -c -O zsh.tar.xz https://sourceforge.net/projects/zsh/files/latest/download --no-check-certificate
         fi
         mkdir -p zsh
         tar -xvf zsh.tar.xz -C zsh --strip-components 1
@@ -89,6 +89,7 @@ case "$1" in
         install_zsh
         install_oh_my_zsh
         echo "You may set http/https proxy to speed up wget process"
+        echo "export PATH=$PATH:$HOME/software/bin" >> ~/.bashrc
         ;;
 esac
 
