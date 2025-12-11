@@ -6,19 +6,19 @@
 	helper = store
 
 [alias]
+	ss = status
+	cm = commit -m
+	ca = commit --amend -v
+	pullrb = pull --rebase
+	br = branch -vv
+	bra = branch -vv --all
 	graph = log --all --graph --pretty=format:'%C(auto)%h%C(auto)%d %s %C(dim white)(%aN, %ar)'
 	graph2 = log --graph --full-history --all --color --pretty=format:"%x1b[31m%h%x09%x1b[32m%d%x1b[0m%x20%s%x20%x1b[33m(%an)%x1b[0m"
-	ss = status
 	st = status -sb
 	wip = for-each-ref --sort='authordate:iso8601' --format=' %(color:green)%(authordate:relative)%09%(color:white)%(refname:short)' refs/heads
 	versions = tag -l --sort=version:refname
-	br = branch -vv
-	bra = branch -vv --all
-	bed = branch --edit-description
 	aa = add --all :/
 	ci = commit -v
-	ca = commit --amend -v
-	cm = commit -m
 	save = commit -a -m "Save"
 	co = checkout
 	di = diff
@@ -38,7 +38,6 @@
 	noff = merge --no-ff
 	f = fetch --tags --prune
 	fa = fetch --all --tags --prune
-	pullrb = pull --rebase
 	mirror-remote = ! "mr() { git push \"${2}\" \"refs/remotes/${1}/*:refs/heads/*\" && git remote set-head \"${2}\" -a; }; mr"
 	count = diff --stat "4b825dc642cb6eb9a060e54bf8d69288fbee4904" # hash of empty tree
 	credit = shortlog -sn
@@ -68,7 +67,7 @@
 	zip = ! "zip() { git archive --format zip --prefix=\"${PWD##*/}/\" HEAD -o ${1}; }; zip"
 
 [init]
-	defaultBranch = master
+	defaultBranch = main
   
 [diff]
 	mnemonicPrefix = true
