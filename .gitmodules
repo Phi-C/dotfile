@@ -1,0 +1,3 @@
+[submodule "3rdparty/tmux/tmux-dotbar"]
+	path = 3rdparty/tmux/tmux-dotbar
+	url = https://github.com/vaaleyard/tmux-dotbar.git
