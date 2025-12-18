@@ -1,6 +1,14 @@
 " enter the current millenim
 set nocompatible
 
+" Allow backspacing over everything in insert mode.
+set backspace=indent,eol,start
+
+" 总是显示状态栏
+set laststatus=2
+
+" 自定义状态栏显示文件路径
+set statusline=%F\ %m\ %r\ %y\ [%l,%v][%p%%]\ %{strftime(\"%H:%M\")}
 
 " FINDING FILES:
 
@@ -18,8 +26,13 @@ set expandtab
 
 " Enable mouse
 set mouse=a
+
+ " keep 50 lines of command line history
+set history=50
 " Show history command
 set showcmd     " display incomplete commands right_bottom
+" display completion matches in a status line
+set wildmenu
 
 " Clipboard setting
 set clipboard=unnamed

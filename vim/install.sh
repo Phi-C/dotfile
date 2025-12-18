@@ -1,4 +1,5 @@
 #! /bin/bash -e
+set -euox pipefail
 
 # ====== System Determine ======
 echo $(uname)

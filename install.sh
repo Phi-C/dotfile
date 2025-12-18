@@ -1,5 +1,5 @@
 #!/bin/bash
-set -ex
+set -euox pipefail
 
 # Function to check if a package is installed
 is_installed() {

@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+set -euox pipefail
 
 # ==================== 配置区 ====================
 INSTALL_PREFIX="$HOME/software"

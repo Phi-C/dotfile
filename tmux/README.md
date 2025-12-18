@@ -11,6 +11,8 @@ exit    # 或者: Ctrl + B, 然后按x
 Prefix + : source-file ~/.tmux.conf
 ```
 
+1. 复制文本: `Option` + 鼠标移动
+
 
 ## 2. session管理
 1. `Ctrl + B`, 然后按`s`. s表示session. 会列出所有session，按`Enter`切换到对应的session
