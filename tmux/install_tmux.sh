@@ -2,7 +2,7 @@
 set -euox pipefail
 
 # ==================== 配置区 ====================
-MATERIAL_DIR="$HOME/dotfile"
+MATERIAL_DIR="$HOME/downloads"
 INSTALL_PREFIX="$HOME/software"
 LIBEVENT_VERSION="2.1.12"
 NCURSES_VERSION="6.1"

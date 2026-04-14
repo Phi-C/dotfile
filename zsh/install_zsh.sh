@@ -14,15 +14,15 @@ echo "=== install_zsh.sh: Current working directory: $(pwd) ==="
 NCURSES_INSTALL=ON
 
 install_ncurses() {
-    mkdir -p "$HOME/dotfile"
+    mkdir -p "$HOME/downloads"
     mkdir -p "$HOME/software"
-    if [ ! -f "$HOME/dotfile/ncurses-6.1.tar.gz" ]; then
-        wget -c -O "$HOME/dotfile/ncurses-6.1.tar.gz" https://ftp.gnu.org/pub/gnu/ncurses/ncurses-6.1.tar.gz --no-check-certificate
+    if [ ! -f "$HOME/downloads/ncurses-6.1.tar.gz" ]; then
+        wget -c -O "$HOME/downloads/ncurses-6.1.tar.gz" https://ftp.gnu.org/pub/gnu/ncurses/ncurses-6.1.tar.gz --no-check-certificate
     fi
-    tar -zxvf "$HOME/dotfile/ncurses-6.1.tar.gz" -C "$HOME/dotfile"
+    tar -zxvf "$HOME/downloads/ncurses-6.1.tar.gz" -C "$HOME/downloads"
 
     # install zsh to $HOME/software
-    pushd "$HOME/dotfile/ncurses-6.1"
+    pushd "$HOME/downloads/ncurses-6.1"
     ./configure --prefix="$HOME/software" CXXFLAGS="-fPIC" CFLAGS="-fPIC" --with-shared && make && make install
     popd 
 }
@@ -32,16 +32,16 @@ install_zsh() {
         chsh -s $(cat /etc/shells | grep zsh)
     else
         # install zsh from source
-        mkdir -p "$HOME/dotfile"
+        mkdir -p "$HOME/downloads"
         mkdir -p "$HOME/software"
-        if [ ! -f "$HOME/dotfile/zsh.tar.xz" ]; then
-            wget -c -O "$HOME/dotfile/zsh.tar.xz" https://sourceforge.net/projects/zsh/files/latest/download --no-check-certificate
+        if [ ! -f "$HOME/downloads/zsh.tar.xz" ]; then
+            wget -c -O "$HOME/downloads/zsh.tar.xz" https://sourceforge.net/projects/zsh/files/latest/download --no-check-certificate
         fi
-        mkdir -p "$HOME"/dotfile/zsh
-        tar -xvf "$HOME/dotfile/zsh.tar.xz" -C "$HOME/dotfile/zsh" --strip-components 1
+        mkdir -p "$HOME/downloads/zsh"
+        tar -xvf "$HOME/downloads/zsh.tar.xz" -C "$HOME/downloads/zsh" --strip-components 1
 
         # install zsh to $HOME/software
-        pushd "$HOME/dotfile/zsh"
+        pushd "$HOME/downloads/zsh"
         if [[ ${NCURSES_INSTALL} == "ON" ]]; then
             ./configure --prefix="$HOME/software" CPPFLAGS="-I$HOME/software/include -I$HOME/software/include/ncurses" LDFLAGS="-L$HOME/software/lib"
         else
@@ -49,7 +49,7 @@ install_zsh() {
         fi
         make && make install
         popd
-        rm -rf "$HOME/dotfile/zsh"
+        rm -rf "$HOME/downloads/zsh"
 
         echo "export PATH=$PATH:$HOME/software/bin" >> "$HOME/.bashrc"
         echo "export LD_LIBRARY_PATH=\"$HOME/software/lib:\$LD_LIBRARY_PATH\"" >> "$HOME/.bashrc"

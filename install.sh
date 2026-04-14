@@ -53,8 +53,24 @@ fi
 
 # Install build tools (required for compiling zsh and tmux from source)
 if [[ -n "$BUILD_TOOLS" ]]; then
-    echo "Installing build tools (gcc, make, etc.)..."
-    eval "$INSTALLER $BUILD_TOOLS"
+    # Check and install each build tool individually
+    for tool in $BUILD_TOOLS; do
+        # Map package names to their command names
+        case "$tool" in
+            build-essential)  cmd="gcc" ;;      # build-essential provides gcc
+            gcc-c++)          cmd="g++" ;;      # CentOS gcc-c++ package provides g++
+            pkg-config)       cmd="pkg-config" ;;
+            pkgconfig)        cmd="pkg-config" ;;  # CentOS package name differs
+            *)                cmd="$tool" ;;   # Default: use package name as command
+        esac
+
+        if is_installed "$cmd"; then
+            echo "$tool (command: $cmd) is already installed. Skipping..."
+        else
+            echo "Installing $tool..."
+            eval "$INSTALLER $tool"
+        fi
+    done
 else
     echo "Build tools should already be available on macOS via Xcode Command Line Tools"
 fi
@@ -76,33 +92,85 @@ if [[ -z "${HOME:-}" ]]; then
 fi
 export HOME
 echo "=== install.sh: HOME is set to: $HOME ==="
-echo "=== install.sh: Files will be downloaded to: $HOME/dotfile ==="
+echo "=== install.sh: Files will be downloaded to: $HOME/downloads ==="
 
 # Get the absolute path of the script directory
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 
+# Parse command line arguments
+INSTALL_ZSH=true
+INSTALL_TMUX=true
+INSTALL_CONFIG=true
+
+while [[ $# -gt 0 ]]; do
+    case "$1" in
+        zsh)
+            INSTALL_ZSH=true
+            INSTALL_TMUX=false
+            INSTALL_CONFIG=false
+            shift
+            ;;
+        tmux)
+            INSTALL_ZSH=false
+            INSTALL_TMUX=true
+            INSTALL_CONFIG=true
+            shift
+            ;;
+        all|"")
+            INSTALL_ZSH=true
+            INSTALL_TMUX=true
+            INSTALL_CONFIG=true
+            shift
+            ;;
+        *)
+            echo "Unknown option: $1"
+            echo "Usage: $0 [zsh|tmux|all]"
+            echo "  zsh  - Install only zsh"
+            echo "  tmux - Install only tmux"
+            echo "  all  - Install everything (default)"
+            exit 1
+            ;;
+    esac
+done
+
 # Install zsh from source
-if ! is_installed "zsh"; then
-    if [[ -f ~/.zshrc ]]; then
-        echo "~/.zshrc already exists. Backing up..."
-        mv ~/.zshrc ~/.zshrc.backup.$(date +%Y.%m.%d.%H%M%S)
+if [[ "$INSTALL_ZSH" == true ]]; then
+    if ! is_installed "zsh"; then
+        if [[ -f ~/.zshrc ]]; then
+            echo "~/.zshrc already exists. Backing up..."
+            mv ~/.zshrc ~/.zshrc.backup.$(date +%Y.%m.%d.%H%M%S)
+        fi
+        # Explicitly pass HOME as environment variable to the child script
+        HOME="$HOME" bash "$SCRIPT_DIR/zsh/install_zsh.sh"
     fi
-    # Explicitly pass HOME as environment variable to the child script
-    HOME="$HOME" bash "$SCRIPT_DIR/zsh/install_zsh.sh"
 fi
 
 # Install tmux from source
-if ! is_installed "tmux"; then
-    if [[ -f ~/.tmux.conf ]]; then
-        echo "~/.tmux.conf already exists. Backing up..."
-        mv ~/.tmux.conf ~/.tmux.conf.backup.$(date +%Y.%m.%d.%H%M%S)
+if [[ "$INSTALL_TMUX" == true ]]; then
+    if ! is_installed "tmux"; then
+        if [[ -f ~/.tmux.conf ]]; then
+            echo "~/.tmux.conf already exists. Backing up..."
+            mv ~/.tmux.conf ~/.tmux.conf.backup.$(date +%Y.%m.%d.%H%M%S)
+        fi
+        HOME="$HOME" SYSTEM="$SYSTEM" bash "$SCRIPT_DIR/tmux/install_tmux.sh"
     fi
-    HOME="$HOME" SYSTEM="$SYSTEM" bash "$SCRIPT_DIR/tmux/install_tmux.sh"
 fi
 
 # process tmux config
-cp tmux/.tmux.conf ~/.tmux.conf
-mkdir -p "~/.config"
+if [[ "$INSTALL_CONFIG" == true ]]; then
+    # Backup and copy tmux config
+    if [[ -f ~/.tmux.conf ]]; then
+        echo "Backing up existing ~/.tmux.conf..."
+        mv ~/.tmux.conf ~/.tmux.conf.backup.$(date +%Y.%m.%d.%H%M%S)
+    fi
+    cp tmux/.tmux.conf ~/.tmux.conf
 
-cp -a 3rdparty ~/.config
+    # Backup and copy 3rdparty config
+    mkdir -p ~/.config
+    if [[ -d ~/.config/3rdparty ]]; then
+        echo "Backing up existing ~/.config/3rdparty..."
+        mv ~/.config/3rdparty ~/.config/3rdparty.backup.$(date +%Y.%m.%d.%H%M%S)
+    fi
+    cp -a 3rdparty ~/.config
+fi
