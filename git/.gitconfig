@@ -1,6 +1,6 @@
-# [user]
-# 	email = xxx@gmail.commit
-# 	name = xxx
+[user]
+	email = chenxjhit@163.com
+	name = Phi-C
 
 [credential]
 	helper = store
@@ -9,6 +9,10 @@
 	ss = status
 	cm = commit -m
 	ca = commit --amend -v
+	# git checkout -b <branch> <start-point>, create a new branch and checkout to it
+	cb = checkout -b
+	# git apply --3way xxx.patch, apply the patch to the current branch
+	ap = apply --3way
 	pullrb = pull --rebase
 	br = branch -vv
 	bra = branch -vv --all
